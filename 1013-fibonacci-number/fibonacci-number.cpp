@@ -10,7 +10,13 @@ public:
     int fib(int n) {
         if(n<=1)
         return n;
-        vector<int> dp(n+1,-1);
-        return solve(n,dp);
+        int c,a=0;
+        int b=1;
+        for(int i=2;i<=n;i++){
+            c=a+b;
+            a=b;
+            b=c;
+        }
+        return c;
     }
 };
