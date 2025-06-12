@@ -3,14 +3,16 @@ public:
 //bottoms up
     int rob(vector<int>& nums) {
         int n=nums.size();
-        int t[n+1];
-        t[0]=0;
-        t[1]=nums[0];
+        
+        int pp=0;
+        int p=nums[0];
         for(int i=2;i<=n;i++){
-            int steal=nums[i-1]+t[i-2];
-            int skip=t[i-1];
-            t[i]=max(steal,skip);
+            int steal=nums[i-1]+pp;
+            int skip=p;
+            int temp=max(steal,skip);
+            pp=p;
+            p=temp;
         }
-        return t[n];
+        return p;
     }
 };
