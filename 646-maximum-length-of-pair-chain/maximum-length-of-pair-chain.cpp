@@ -1,25 +1,18 @@
 class Solution {
 public:
-int n;
-int dp[1001][1001];
-int solve(int i,int p,vector<vector<int>>& pairs){
-    if(i>=n) return 0;
-    int take=0;
-    if(p!=-1 && dp[i][p]!=-1) return dp[i][p];
-    if(p==-1 || pairs[p][1]<pairs[i][0]){
-        take=1+solve(i+1,i,pairs);
-    }
-    int skip=solve(i+1,p,pairs);
-    if(p!=-1 ){
-        dp[i][p]=max(skip,take);
-    }
-    return max(skip,take);
-
-}
     int findLongestChain(vector<vector<int>>& pairs) {
-        memset(dp,-1,sizeof(dp));
+        int n=pairs.size();
         sort(pairs.begin(),pairs.end());
-        n=pairs.size();
-        return solve(0,-1,pairs);
+        vector<int> t(n,1);
+        int maxL=1;//atleast 1 toh rhega
+        for(int i=0;i<n;i++){
+            for(int j=0;j<i;j++){
+                if(pairs[j][1]<pairs[i][0]){
+                    t[i]=max(t[j]+1,t[i]);
+                    maxL=max(maxL,t[i]);
+                }
+            }
+        }
+        return maxL;
     }
 };
