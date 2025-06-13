@@ -1,29 +1,17 @@
 class Solution {
-public://  n
-    int dp[2501][2501];
-    int n;
-    
-    int solve(int i,int p,vector<int>& nums){//i and prev i
-        //base
-        if(i>=n) return 0;
-        if(p!=-1 && dp[i][p]!=-1 ) return dp[i][p];
-        int take=0;
-        if(p==-1 || nums[p]<nums[i]){
-            take=1+solve(i+1,i,nums);
-        }
-            int skip=solve(i+1,p,nums);//prev i will be save
-            if(p!=-1){
-
-                dp[i][p]=max(skip,take);
-            }
-        return max(skip,take);
-
-    }
-
+public:
     int lengthOfLIS(vector<int>& nums) {
-        memset(dp,-1,sizeof(dp));//intialise
-        n=nums.size();
-        return solve(0,-1,nums);
-
+        int n=nums.size();
+        vector<int> t(n,1);
+        int maxL=1;//atleast 1 toh rhega
+        for(int i=0;i<n;i++){
+            for(int j=0;j<i;j++){
+                if(nums[j]<nums[i]){
+                    t[i]=max(t[j]+1,t[i]);
+                    maxL=max(maxL,t[i]);
+                }
+            }
+        }
+        return maxL;
     }
 };
