@@ -1,23 +1,23 @@
 class Solution {
-public://brute with memo
-int dp[1001][1001];
-bool check(int i,int j,string s){
-    if(i>j){
-        return true;
-    }
-    if(dp[i][j]!=-1) return dp[i][j];
-    if(s[i]==s[j]) {
-        return dp[i][j]=check(i+1,j-1,s);
-    }
-    return  dp[i][j]=false;  
-}
+public:
     int countSubstrings(string s) {
-        memset(dp,-1,sizeof(dp));//initialise
-        int cnt=0;
-        int n=s.size();
-        for(int i=0;i<n;i++){
-            for(int j=i;j<n;j++){
-                if(check(i,j,s)){
+        int n = s.size();
+        int cnt = 0;
+        vector<vector<bool>> t(n, vector<bool>(n, false));
+        for (int l = 1; l <= n; l++) { // this is the basic condition we have to
+                                       // check for every length for each i
+            for (int i = 0; i+l-1 < n; i++) {
+                int j=i+l-1;
+                if(i==j){
+                    t[i][j]=true;
+                }
+                else if(i+1==j){
+                    t[i][j]=s[i]==s[j];
+                }
+                else{
+                    t[i][j]=(s[i]==s[j] && t[i+1][j-1]);
+                }
+                if(t[i][j]==true){
                     cnt++;
                 }
             }
