@@ -1,17 +1,15 @@
 class Solution {
 public:
-    char kthCharacter(int k) {
-       
-        string s="a";
-        while(s.size()<=k){
-            string temp="";
-            for(int i=0;i<s.size();i++){
-                temp+=s[i]+1;
-            }
-          
-            s+=temp;
-            
+    int count_ones(int n) {
+        int result = 0;
+        while (n) {
+            n &= n - 1;
+            ++result;
         }
-        return s[k-1];
+        return result;
+    }
+
+    char kthCharacter(int k) {
+        return 'a' + count_ones(k - 1);
     }
 };
