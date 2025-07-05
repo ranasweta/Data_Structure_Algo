@@ -1,32 +1,22 @@
 class Solution {
 public:
-int n;
-int dp[5001][2];
-int solve(vector<int>& prices,int day,bool buy){
-    if(day>=n){
-        return 0;
-    }
-    if(dp[day][buy]!=-1){
-        return dp[day][buy];
-    }
-    int profit=0;
-    if(buy){
-        int take=solve(prices,day+1,false)-prices[day];
-        int not_take=solve(prices,day+1,true);
-        profit=max({take,not_take,profit});
-    }
-    else{
-        int sell=prices[day]+solve(prices,day+2,true);//cool on day+1
-        int not_sell=solve(prices,day+1,false);
-        profit=max({sell,not_sell,profit});
-    }
-    return dp[day][buy]=profit;
-}
     int maxProfit(vector<int>& prices) {
-      n=prices.size();
-      memset(dp,-1,sizeof(dp));
-      int day=0;
-      bool buy=true;//initially we have to buy
-      return solve(prices,day,buy);
+        int n=prices.size();
+        if(n==1){
+            return 0;
+        }
+        vector<int>t(n,0);
+        //t[i] max total profit till day i t[0]=0
+        //       sell       buy
+        t[1]=max(prices[1]-prices[0],0);
+        for(int i=2;i<n;i++){
+            t[i]=t[i-1];
+            for(int j=0;j<=i-1;j++){
+                int prev_profit=j>=2?t[j-2]:0;
+                t[i]=max(t[i],prices[i]-prices[j]+prev_profit);
+            }
+        }
+        return t[n-1];
+
     }
 };
