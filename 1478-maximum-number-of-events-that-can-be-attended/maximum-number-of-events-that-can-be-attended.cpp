@@ -8,6 +8,10 @@ public:
         int i=0;//start
         int day=events[0][0];
         while(!pq.empty() || i<n){
+            //events={{5,10},{15,20}} no need to waste 6 7 8 9 ----14 iteration
+            if(pq.empty()){
+                day=events[i][0];
+            }
             //if start date is same
             while(i<n && day==events[i][0] ){
                 pq.push(events[i][1]);//pushing end date to sort it 
