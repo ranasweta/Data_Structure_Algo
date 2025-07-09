@@ -1,20 +1,22 @@
 class Solution {
 public:
-int n;
-int dp[501][501];
-int solve(vector<int>& satisfaction,int i,int time){
-    if(i>=n){
-        return 0;
-    }
-    if(dp[i][time]!=-1) return dp[i][time];
-    int incl=time*satisfaction[i]+solve(satisfaction,i+1,time+1);
-    int excl=solve(satisfaction,i+1,time);
-    return dp[i][time]=max(incl,excl);
-}
     int maxSatisfaction(vector<int>& satisfaction) {
-      n=satisfaction.size();
-      memset(dp,-1,sizeof(dp));
-      sort(begin(satisfaction),end(satisfaction));
-      return solve(satisfaction,0,1);  
+        int n = satisfaction.size();
+        sort(satisfaction.begin(), satisfaction.end()); // Sort in increasing order
+
+        // dp[i][t] = max total satisfaction using dishes from i to n-1 with current time t
+        vector<vector<int>> dp(n + 1, vector<int>(n + 2, 0)); // +2 for safe access at t+1
+
+        for (int i = n - 1; i >= 0; i--) {
+            for (int t = 1; t <= n; t++) {
+                // Either take the current dish or skip it
+                dp[i][t] = max(
+                    satisfaction[i] * t + dp[i + 1][t + 1],
+                    dp[i + 1][t]
+                );
+            }
+        }
+
+        return dp[0][1];
     }
 };
