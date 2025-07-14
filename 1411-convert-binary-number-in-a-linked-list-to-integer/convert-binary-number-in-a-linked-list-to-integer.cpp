@@ -9,26 +9,13 @@
  * };
  */
 class Solution {
-public:
-    ListNode* reverseLL(ListNode* head){
-        if(head==NULL || head->next==NULL){
-            return head;
-        }
-        ListNode* last=reverseLL(head->next);
-        head->next->next=head;
-        head->next=NULL;
-        return last;
-    }
+public://bit manipulation
     int getDecimalValue(ListNode* head) {
-       head=reverseLL(head);
-       int r=0;
-       int power=0;
-       while(head){
-        r+=pow(2,power)*head->val;
-        head=head->next;
-        power++;
-
-       }
-       return r;
+        int r=0;
+        while(head){
+            r=(r<<1)|(head->val);
+            head=head->next;
+        }
+        return r;
     }
 };
