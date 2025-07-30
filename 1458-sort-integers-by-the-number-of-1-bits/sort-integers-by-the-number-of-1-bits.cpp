@@ -10,8 +10,8 @@ public:
     }
     vector<int> sortByBits(vector<int>& arr) {
         auto lambda=[&](int &a,int &b){
-            int count_a=countOnes(a);
-            int count_b=countOnes(b);
+            int count_a=__builtin_popcount(a);
+            int count_b=__builtin_popcount(b);
             if(count_a==count_b){
                 return a<b;
             }
