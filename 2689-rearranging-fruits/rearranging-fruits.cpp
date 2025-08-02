@@ -25,7 +25,8 @@ public:
                 finalList.push_back(cost);
             }
         }
-        sort(begin(finalList), end(finalList));
+        // sort(begin(finalList), end(finalList));
+        nth_element(begin(finalList),begin(finalList)+finalList.size()/2,end(finalList));
         long long result = 0;
         for (int i = 0; i < finalList.size() / 2; i++) {
             result += min(finalList[i], minEl * 2);
