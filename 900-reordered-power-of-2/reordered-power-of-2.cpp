@@ -1,16 +1,17 @@
 class Solution {
 public:
-//similar to matching anagrams
-    string toString(int n){
-        string s=to_string(n);
-        sort(begin(s),end(s));
-        return s;
+    vector<int> getVectorCountFormat(int n){
+        vector<int> v(10,0);
+        while(n){
+            v[n%10]++;
+            n/=10;
+        }
+        return v;
     }
     bool reorderedPowerOf2(int n) {
-        //2^29 is the highest under 10^9 value
-        string s=toString(n);
+        vector<int> inp=getVectorCountFormat(n);
         for(int p=0;p<=29;p++){
-            if(s==toString(1<<p)){
+            if(inp==getVectorCountFormat(1<<p)){
                 return true;
             }
         }
