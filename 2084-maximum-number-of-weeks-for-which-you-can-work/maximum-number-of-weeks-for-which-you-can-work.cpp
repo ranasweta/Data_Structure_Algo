@@ -9,7 +9,7 @@ public:
 
         for(int i=1;i<n;i++){
 
-            slots -= min( milestones[0]-1 ,  milestones[i]);
+            slots -=   milestones[i];
 
         }
 
