@@ -1,13 +1,22 @@
 class Solution {
 public:
-    void dfs(int u,unordered_map<int,vector<pair<int,int>>>& adj,vector<bool> &visited,int &result){
-        visited[u]=true;
-        for(auto vec: adj[u]){
-            int v=vec.first;
-            int dist=vec.second;
-         result=min(result,dist);
-            if(!visited[v]){
-                dfs(v,adj,visited,result);
+    void bfs(int vertex,unordered_map<int,vector<pair<int,int>>>& adj,vector<bool> &visited,int &result){
+        
+        queue<int>que;
+        que.push(vertex);
+        visited[vertex]=true;
+        
+       
+        while(!que.empty()){
+            int u=que.front();
+            que.pop();
+            for(auto &[v,dist]:adj[u]){
+                result=min(result,dist);
+                if(!visited[v]){
+                    que.push(v);
+                    visited[v]=true;
+                    
+                }
             }
         }
     }
@@ -23,7 +32,7 @@ public:
         }
         
         vector<bool> visited(n+1,false);
-        dfs(1,adj,visited,result);
+        bfs(1,adj,visited,result);
         return result;
 
     }
