@@ -1,16 +1,25 @@
 class Solution {
-public://using dfs vese toh ye swal dsu se hi best solve hi skta hai
+public://using bfs vese toh ye swal dsu se hi best solve hi skta hai
     vector<bool> visited;
         unordered_map<int,vector<int>> adj;
         long long size;
-    void dfs(int u){
+    void bfs(int u){
+        queue<int> que;
+        que.push(u);
         visited[u]=true;
         size++;
-        for(auto & v: adj[u]){
-            if(!visited[v]){
-                dfs(v);
+        while(!que.empty()){
+            int x=que.front();
+            que.pop();
+            for( int v: adj[x]){
+                if(!visited[v]){
+                    visited[v]=true;
+                    que.push(v);
+                    size++;
+                }
             }
         }
+        
     }
     long long countPairs(int n, vector<vector<int>>& edges) {
         for(auto edge: edges){
@@ -25,7 +34,7 @@ public://using dfs vese toh ye swal dsu se hi best solve hi skta hai
         for(int i=0;i<n;i++){
             if(!visited[i]){
                 size=0;
-                dfs(i);
+                bfs(i);
                 res+=(size)*(remaining - size);
                 remaining-=size;
 
