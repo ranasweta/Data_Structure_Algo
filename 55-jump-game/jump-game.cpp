@@ -1,27 +1,20 @@
 class Solution {
-public:
-    int n;
-    vector<int> dp; // Use int to represent -1 = unvisited, 1 = true, 0 = false
-
-    bool solve(vector<int>& nums, int idx) {
-        if (idx >= n - 1) return true;
-        if (dp[idx] != -1) return dp[idx];
-
-        int furthestJump = min(idx + nums[idx], n - 1);
-        for (int i = idx + 1; i <= furthestJump; ++i) {
-            if (solve(nums, i)) {
-               
-                return dp[idx] = true;
+public://bottom up
+    bool canJump(vector<int>& nums) {
+        int n=nums.size();
+        /*
+        t[i] mean i can reach at index i
+        */
+        vector<bool> t(n,false);
+        t[0]=true;
+        for(int i=1;i<n;i++){
+            for(int j=i-1;j>=0;j--){
+                if(t[j]==true && (j+nums[j]>=i)){
+                    t[i]=true;
+                    break;
+                }
             }
         }
-
-   
-        return dp[idx] =false;
-    }
-
-    bool canJump(vector<int>& nums) {
-        n = nums.size();
-        dp.resize(n, -1); // -1 = unvisited
-        return solve(nums, 0);
+        return t[n-1];
     }
 };
