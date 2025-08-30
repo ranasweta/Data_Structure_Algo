@@ -1,43 +1,21 @@
 class Solution {
-public:
-    bool isValidSudoku(vector<vector<char>>& grid) {
-        // Check rows
-        for(int i = 0; i < 9; i++) {
-            set<char> st;
-            for(int j = 0; j < 9; j++) {
-                if(grid[i][j] != '.') {
-                    if(st.find(grid[i][j]) != st.end()) return false;
-                    st.insert(grid[i][j]);
+public:// Using a single hash set to track row, column, and box constraints
+    bool isValidSudoku(vector<vector<char>>& board) {
+        unordered_set<string> st;
+        for(int i=0;i<9;i++){
+            for(int j=0;j<9;j++){
+                if(board[i][j]=='.') continue;
+                string r=string(1,board[i][j])+"_row_"+to_string(i);
+                string c=string(1,board[i][j])+"_col_"+to_string(j);
+                string rc=string(1,board[i][j])+"_box_"+to_string(i/3)+"_"+to_string(j/3);
+                if(st.find(r)!=st.end() || st.find(c)!=st.end() || st.find(rc)!=st.end()){
+                    return false;
                 }
+                st.insert(r);
+                st.insert(c);
+                st.insert(rc);
             }
         }
-
-        // Check columns
-        for(int i = 0; i < 9; i++) {
-            set<char> st;
-            for(int j = 0; j < 9; j++) {
-                if(grid[j][i] != '.') {
-                    if(st.find(grid[j][i]) != st.end()) return false;
-                    st.insert(grid[j][i]);
-                }
-            }
-        }
-
-        // Check 3x3 boxes
-        for(int sr = 0; sr < 9; sr += 3) {
-            for(int sc = 0; sc < 9; sc += 3) {
-                set<char> st;
-                for(int i = sr; i < sr + 3; i++) {
-                    for(int j = sc; j < sc + 3; j++) {
-                        if(grid[i][j] != '.') {
-                            if(st.find(grid[i][j]) != st.end()) return false;
-                            st.insert(grid[i][j]);
-                        }
-                    }
-                }
-            }
-        }
-
         return true;
     }
 };
