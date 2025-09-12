@@ -8,7 +8,7 @@ public:
                 cnt++;
             }
         }
-        cout<<cnt;
+        
         if(  cnt==0){
             return false;
         }
