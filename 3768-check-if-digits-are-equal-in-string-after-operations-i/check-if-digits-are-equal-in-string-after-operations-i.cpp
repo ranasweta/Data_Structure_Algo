@@ -1,16 +1,16 @@
 class Solution {
 public:
     bool hasSameDigits(string s) {
-        string temp="";
-        while(s.length()>2){
-            temp="";
-            for(int i=0;i<s.length()-1;i++){
-                temp.push_back((s[i]-'0'+s[i+1]-'0')%10+'0');
+        int n=s.length();
+        while(n>2){
+
+            for(int i=0;i<n-1;i++){
+                s[i]=((s[i]-'0'+s[i+1]-'0')%10+'0');
             }
-            s=temp;
+            n--;
             
         }
         cout<<s<<" ";
-        return temp[0]==temp[1];
+        return s[0]==s[1];
     }
 };
