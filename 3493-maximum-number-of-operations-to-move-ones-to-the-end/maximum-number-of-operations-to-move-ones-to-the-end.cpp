@@ -21,6 +21,7 @@ public://brute greedy
        for(int n: one){
         temp+=n;
         ans+=temp;
+        cout<<n<<endl;
        }
        return ans;
     }
