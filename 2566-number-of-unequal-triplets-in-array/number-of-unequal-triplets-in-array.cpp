@@ -1,17 +1,15 @@
 class Solution {
 public:
     int unequalTriplets(vector<int>& nums) {
-        // brute
-        int cnt = 0;
-        for (int i = 0; i < nums.size() - 2; i++) {
-            for (int j = i + 1; j < nums.size() - 1; j++) {
-                for (int k = j + 1; k < nums.size(); k++) {
-                    if (nums[i] != nums[j] && nums[j] != nums[k] &&
-                        nums[k] != nums[i])
-                        cnt++;
-                }
-            }
+        unordered_map<int, int> m;
+        for (int n : nums)
+            ++m[n];
+        int res = 0, left = 0, right = nums.size();
+        for (auto [n, cnt] : m) {
+            right -= cnt;
+            res += left * cnt * right;
+            left += cnt;
         }
-        return cnt;
+        return res;
     }
 };
