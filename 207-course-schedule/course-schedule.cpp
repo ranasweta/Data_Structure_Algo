@@ -1,40 +1,34 @@
 class Solution {
-public:
-    bool toposort(unordered_map<int ,vector<int>> &adj,int n,vector<int> &indegree){
-        int count=0;
-        queue<int> que;
-        for(int i=0;i<n;i++){
-            if(indegree[i]==0){
-                que.push(i);
-                count++;
+public://just detection of cycle in a graph 
+    bool dfs(unordered_map<int,vector<int>> &adj,vector<bool> &visited,int u,vector<bool> &inrec){
+        visited[u]=true;
+        inrec[u]=true;
+        for(int v:adj[u]){
+            if(!visited[v] && dfs(adj,visited,v,inrec)){
+                return true;
+            }
+            else if(inrec[v]){
+                return true;
             }
         }
-        while(!que.empty()){
-            int u=que.front();
-            que.pop();
-            for(int &v:adj[u]){
-                indegree[v]--;
-                if(indegree[v]==0){
-                    count++;
-                    que.push(v);
-                }
-            }
-        }
-        if(count==n) return true ;
-        else return false;
+        inrec[u]=false;
+        return false;
     }
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
-
-        unordered_map<int ,vector<int>> adj;
-        vector<int> indegree(numCourses,0);//kahn's algo
-        for(auto &e:prerequisites)
-        {
-            int a=e[0];
-            int b=e[1];
-            //b--->a
-            adj[b].push_back(a);
-            indegree[a]++;
+        unordered_map<int,vector<int>> adj;
+        //for directed
+        for(auto vec:prerequisites){
+            int u=vec[1];
+            int v=vec[0];
+            adj[u].push_back(v);
         }
-        return toposort(adj,numCourses,indegree);
+        vector<bool> visited(numCourses,false);
+        vector<bool> inrec(numCourses,false);
+        for(int i=0;i<numCourses;i++){
+            if(!visited[i] && dfs(adj,visited,i,inrec)){
+                return false;
+            }
+        }
+        return true;
     }
 };
