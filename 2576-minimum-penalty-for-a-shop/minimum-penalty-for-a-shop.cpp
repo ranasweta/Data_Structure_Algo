@@ -9,7 +9,8 @@ public:
         int res = 0;
 
         int seenN = 0, seenY = 0;
-        for(int i = 0; i < customers.size(); i++) {
+        int n=customers.size();
+        for(int i = 0; i < n; i++) {
             if(customers[i] == 'Y') seenY++;
             else seenN++;
 
