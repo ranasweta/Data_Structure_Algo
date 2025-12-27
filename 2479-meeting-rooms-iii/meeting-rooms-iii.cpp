@@ -1,46 +1,49 @@
 class Solution {
-public: // brute force
+public:
     int mostBooked(int n, vector<vector<int>>& meetings) {
-        vector<int> Room(n, 0); // for counting rooms used
-        sort(begin(meetings), end(meetings));
-        vector<long long> lastAvailableAt(n,0); // these are meeting rooms which will be storing last available
-        for (auto meet : meetings) {
+        vector<int> roomUsage(n, 0); // to track number of meetings per room
+        vector<long long> lastAvailableAt(n, 0); // when each room is free
+        sort(meetings.begin(), meetings.end());
+
+        for (auto& meet : meetings) {
             int start = meet[0];
             int end = meet[1];
             int duration = end - start;
-            bool found = false;
 
-            long long earlyMeetTime =
-                LLONG_MAX; // which meet will end and what is its duration
-            int earlyMeet = 0;
-            for (int room = 0; room < n; room++) {
-                if (lastAvailableAt[room] <=start) {
-                    lastAvailableAt[room] = end;
-                    found = true;
-                    Room[room]++;
-                    break;
-                }
-                if (lastAvailableAt[room] < earlyMeetTime) {
-                    earlyMeetTime = lastAvailableAt[room];
-
-                    earlyMeet = room;
+            int availableRoom = -1;
+            for (int i = 0; i < n; i++) {
+                if (lastAvailableAt[i] <= start) {
+                    if (availableRoom == -1 || i < availableRoom) {
+                        availableRoom = i;
+                    }
                 }
             }
-            // no room empty
-            if (!found) {
-                // pick that one which will end early
-                lastAvailableAt[earlyMeet] += duration;
-                Room[earlyMeet]++;
+
+            if (availableRoom != -1) {
+                lastAvailableAt[availableRoom] = end;
+                roomUsage[availableRoom]++;
+            } else {
+                // Find the room that becomes available the earliest
+                long long minTime = LLONG_MAX;
+                int chosenRoom = -1;
+                for (int i = 0; i < n; i++) {
+                    if (lastAvailableAt[i] < minTime) {
+                        minTime = lastAvailableAt[i];
+                        chosenRoom = i;
+                    }
+                }
+                lastAvailableAt[chosenRoom] += duration;
+                roomUsage[chosenRoom]++;
             }
         }
-        int maxUsedRoom = -1;
-        int maxUsed = 0;
-        for (int i = 0; i < n; i++) {
-            if (Room[i] > maxUsed) {
-                maxUsed = Room[i];
-                maxUsedRoom = i;
+
+        int mostUsedRoom = 0;
+        for (int i = 1; i < n; i++) {
+            if (roomUsage[i] > roomUsage[mostUsedRoom]) {
+                mostUsedRoom = i;
             }
         }
-        return maxUsedRoom;
+
+        return mostUsedRoom;
     }
 };
