@@ -1,23 +1,18 @@
 class Solution {
-public://recur+meomo    
-int n;
-int dp[101];
-    int solve(int i,string s){
-        //base
-        if(i==n) return 1;
-        if(s[i]=='0') return 0;
-        if(dp[i]!=-1) return dp[i];
-        //it will see for single character adter ith index
-        int res=solve(i+1,s);
-        if(i+1<n &&(s[i]=='1' || s[i]=='2' && s[i+1]<='6')){
-            res+=solve(i+2,s);
-        }
-        return dp[i]=res;
-
-    }
+public://bottom up
     int numDecodings(string s) {
-        n=s.length();
-        memset(dp,-1,sizeof(dp));
-        return solve(0,s);
+        int n=s.length();
+        vector<int> dp(n+1,0);
+        dp[n]=1;//as its just copy of my recur code
+        for(int i=n-1 ; i>=0 ;i--){
+            if(s[i]=='0') dp[i]=0;
+            else{
+                dp[i]=dp[i+1];
+                if((i+1<n)&&(s[i]=='1' || s[i]=='2' && s[i+1]<='6')){
+                    dp[i]+=dp[i+2];
+                }
+            }
+        }
+        return dp[0];
     }
 };
