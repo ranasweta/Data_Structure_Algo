@@ -1,32 +1,17 @@
 class Solution {
 public:
-    int findDays(vector<int>& weights, int cap) {
-        int days = 1, load = 0;
-        for (int w : weights) {
-            if (load + w > cap) {
-                days++;
-                load = 0;
-            }
-            load += w;
+        int shipWithinDays(vector<int>& weights, int D) {
+        int left = 0, right = 25000000;
+        for (int w: weights)
+            left = max(left, w);
+        while (left < right) {
+            int mid = (left + right) / 2, need = 1, cur = 0;
+            for (int i = 0; i < weights.size() && need <= D; cur += weights[i++])
+                if (cur + weights[i] > mid)
+                    cur = 0, need++;
+            if (need > D) left = mid + 1;
+            else right = mid;
         }
-        return days;
-    }
-
-    int shipWithinDays(vector<int>& weights, int days) {
-        int low = *max_element(weights.begin(), weights.end());
-        int high = accumulate(weights.begin(), weights.end(), 0);
-        int ans = high;
-
-        while (low <= high) {
-            int mid = low + (high - low) / 2;
-            int d = findDays(weights, mid);
-            if (d <= days) {
-                ans = mid;          // record possible answer
-                high = mid - 1;     // try to minimize capacity
-            } else {
-                low = mid + 1;      // increase capacity
-            }
-        }
-        return ans;
+        return left;
     }
 };
