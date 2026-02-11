@@ -1,7 +1,70 @@
+//Approach - 2 (Using Segment Tree RMin Max Query
+//T.C : O(nlogn)
+//S.C : O(n)
 class Solution {
 public:
+
+    vector<int> segMin, segMax, lazy;
+    int n;
+
+    void propagate(int i, int l, int r) {
+        if (lazy[i] != 0) {
+            segMin[i] += lazy[i];
+            segMax[i] += lazy[i];
+
+            if (l != r) {
+                lazy[2*i+1] += lazy[i];
+                lazy[2*i+2] += lazy[i];
+            }
+            lazy[i] = 0;
+        }
+    }
+
+    // Range add val to [start, end]
+    void updateRange(int start, int end, int i, int l, int r, int val) {
+        propagate(i, l, r); //make sure to propagate before hand
+
+        if (l > end || r < start) return;
+
+        //[start...end[ is fully inside range of current node [l..r]
+        if (l >= start && r <= end) {
+            lazy[i] += val;
+            propagate(i, l, r);
+            return;
+        }
+
+        int mid = (l + r) / 2;
+        updateRange(start, end, 2*i+1, l, mid, val);
+        updateRange(start, end, 2*i+2, mid+1, r, val);
+
+        segMin[i] = min(segMin[2*i+1], segMin[2*i+2]);
+        segMax[i] = max(segMax[2*i+1], segMax[2*i+2]);
+    }
+
+    int findLeftMostZero(int i, int l, int r) {
+        propagate(i, l, r);
+
+        if(segMin[i] > 0 || segMax[i] < 0) {
+            return -1;
+        }
+
+        if(l == r) {
+            return l;
+        }
+
+        int mid = l + (r-l)/2;
+        int leftResult = findLeftMostZero(2*i+1, l, mid);
+        if(leftResult != -1)
+            return leftResult;
+        
+        return findLeftMostZero(2*i+2, mid+1, r);
+    }
+
     int longestBalanced(vector<int>& nums) {
-        int n = nums.size();
+        n = nums.size();
+        segMin.assign(4*n, 0);
+        segMax.assign(4*n, 0);
+        lazy.assign(4*n, 0);
 
         //treating even = +1 and odd = -1
         vector<int> cumSum(n, 0);
@@ -19,21 +82,17 @@ public:
             }
 
             if(prev != -1) { //we have seen this element in past
-                for(int l = 0; l <= prev; l++) {
-                    cumSum[l] -= val;
-                }
+                //[0..prev] we are adding (-val) in the range
+                updateRange(0, prev, 0, 0, n-1, -val);
             }
 
-            for(int l = 0; l <= r; l++) {
-                cumSum[l] += val;
-            }
+            //[0...r] we are adding val in the range
+            updateRange(0, r, 0, 0, n-1, val);
 
-            for(int l = 0; l <= r; l++) {
-                if(cumSum[l] == 0) {
-                    maxL = max(maxL, r-l+1);
-                    break;
-                }
-            }
+            //We are finding left most 0 in the range [0...r]
+            int l = findLeftMostZero(0, 0, n-1);
+            if(l != -1)
+                maxL = max(maxL, r-l+1);
 
             mp[nums[r]] = r;
         }
