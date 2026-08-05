@@ -1,13 +1,18 @@
-from collections import defaultdict
+from collections import defaultdict, deque
 class Solution:
-    #directed array is given dfs
-    def dfs(self,u,visited,adj):
-        if(visited[u]==1): return
+    #directed array is given bfs
+    def bfs(self,u,visited,adj):
+        q=deque()
+        q.append(u)
 
         visited[u]=1
-        for v in adj[u]:
-            if(not visited[v]) :
-                self.dfs(v,visited,adj)
+        while  q:
+            k=q.popleft()
+            for v in adj[k]:
+                if  not visited[v]:
+                    visited[v]=1
+                    q.append(v)
+       
         
 
 
@@ -20,7 +25,7 @@ class Solution:
             v=invocations[i][1]
             adj[u].append(v)
         visited=[0]*n
-        self.dfs(k,visited,adj)
+        self.bfs(k,visited,adj)
         # now we will search in the invocations if that suspecious is indegree by unsuspecious
         for u,v in invocations:
             if not visited[u] and visited[v]:
