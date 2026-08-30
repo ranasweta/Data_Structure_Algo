@@ -16,6 +16,6 @@ class Solution:
         n=len(nums)
         if indmin>indmax:
             indmax,indmin=indmin,indmax
-        print(indmin," ",indmax)
+        
         ans=min([n-indmax+indmin+1,indmax+1,n-indmin])
         return ans
